@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sort"
 
 	"gogen.quis.cx/bytelib"
@@ -34,8 +33,6 @@ func IslandShaper(s State) State {
 				myPools = append(myPools, p)
 			}
 		}
-		fmt.Printf("Shaper: %c: %d more tiles to solve %d pools (%v)\n", l, rem, len(myPools), sortedCopy(myPools))
-		fmt.Printf("Shaper: %c: reachable %v\n", l, sortedCopy(reachableByIsland[l]))
 		for _, p := range shapeMyIsland(s, islandParts(s, l), reachableByIsland[l], rem, myPools) {
 			s.Set(p, Cell(l))
 		}
@@ -88,9 +85,7 @@ func potentialPools(s State) []Pos {
 func shapeMyIsland(s State, parts []Pos, reachable []Pos, rem int, pools []Pos) []Pos {
 	totalOptions := posSliceToMap(reachable)
 	firstOptions := optionsAround(s, parts, totalOptions)
-	fmt.Printf("first options: %v\n", sortedCopy(posMapToSlice(firstOptions)))
 	firstProposal := proposeIsland(s, posSliceToMap(parts), firstOptions, totalOptions, rem, pools)
-	fmt.Printf("First proposal: %v\n", sortedCopy(firstProposal))
 	unavoidable := map[Pos]void{}
 	for _, p := range firstProposal {
 		unavoidable[p] = void{}
@@ -133,7 +128,6 @@ func proposeIsland(s State, parts, options, totalOptions map[Pos]void, rem int, 
 					}
 				}
 				ok = false
-				// fmt.Printf("Rejecting shape for pooling: %v\n", sortedCopy(posMapToSlice(parts)))
 				break
 			}
 			if ok {
@@ -141,7 +135,6 @@ func proposeIsland(s State, parts, options, totalOptions map[Pos]void, rem int, 
 				if isConnected(ps) {
 					return ps
 				}
-				// fmt.Printf("Rejecting shape for unconnectedness: %v\n", sortedCopy(posMapToSlice(parts)))
 			}
 			delete(parts, p)
 			continue
