@@ -1,0 +1,4 @@
+gogen.quis.cx/bytelib v0.0.0-20211022162416-93deace90bfb h1:35TH8bIJ/IE/K9UYbt1mdqacwnSMrtqL3GBn1BGh6ds=
+gogen.quis.cx/bytelib v0.0.0-20211022162416-93deace90bfb/go.mod h1:ekgw7b6wtDXjTngmTCZJAtWy2L+zfbJ4eW/tLXvFwoc=
+golang.org/x/sync v0.0.0-20210220032951-036812b2e83c h1:5KslGYwFpkhGh+Q16bwMP3cOontH8FOep7tGV86Y7SQ=
+golang.org/x/sync v0.0.0-20210220032951-036812b2e83c/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
