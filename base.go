@@ -245,7 +245,7 @@ func Register(f StrategyFunc, name string, shortcuts ...string) {
 func listUsefulStrategies(s State) State {
 	fmt.Println("Useful strategies:")
 	for n, st := range strategies {
-		if n == "listUsefulStrategies" {
+		if n == "listUsefulStrategies" || n == "autoPickStrategy" {
 			continue
 		}
 		ss := st(s)
