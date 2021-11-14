@@ -4,41 +4,50 @@ func init() {
 	Register(ExpandIslands, "expandIslands", "expand")
 }
 
-func ExpandIslands(s State) State {
-	s = s.Clone()
-	remaining := s.UndiscoveredIslands()
+func ExpandIslands(state State) State {
+	state = state.Clone()
+	remainingLands := state.UndiscoveredIslands()
 	islandTiles := map[byte][]Pos{}
-	for y, r := range s.board {
-		for x, c := range r {
-			if !c.Land() || c == SomeLand {
+	expansions := map[byte][]Pos{}
+
+	for y, row := range state.board {
+		for x, cell := range row {
+			if !cell.Land() || cell == SomeLand {
 				continue
 			}
-			islandTiles[c.Char()] = append(islandTiles[c.Char()], Pos{x, y})
+			islandTiles[cell.Char()] = append(islandTiles[cell.Char()], Pos{x, y})
 		}
 	}
-	for l, r := range remaining {
-		if r == 0 {
+	for land, remaining := range remainingLands {
+		if remaining == 0 {
 			continue
 		}
-		bodies := GroupBodies(s, islandTiles[l])
+		bodies := GroupBodies(state, islandTiles[land])
 	bodyLoop:
-		for _, b := range bodies {
+		for _, body := range bodies {
 			expansionOption := Pos{-1, -1}
-			for p := range b {
-				for _, np := range s.Around(p) {
-					if !s.Get(np).FullyKnown() {
+			for pos := range body {
+				for _, newPos := range state.Around(pos) {
+					if !state.Get(newPos).FullyKnown() {
 						if expansionOption.x != -1 {
 							// Two+ options. Can't decide yet.
 							continue bodyLoop
 						}
-						expansionOption = np
+						expansionOption = newPos
 					}
 				}
 			}
 			if expansionOption.x != -1 {
-				s.Set(expansionOption, Cell(l))
+				expansions[land] = append(expansions[land], expansionOption)
 			}
 		}
 	}
-	return s
+
+	for land, positions := range expansions {
+		for _, pos := range positions {
+			state.Set(pos, Cell(land))
+		}
+	}
+
+	return state
 }
