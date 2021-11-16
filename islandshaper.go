@@ -132,7 +132,7 @@ func proposeIsland(s State, parts, options, totalOptions map[Pos]void, rem int, 
 			}
 			if ok {
 				ps := posMapToSlice(parts)
-				if isConnected(ps) {
+				if isConnected(ps) && !doesIslandCutWater(s, ps) {
 					return ps
 				}
 			}
@@ -227,4 +227,32 @@ func sortedCopy(ps []Pos) []Pos {
 		return c[i].x < c[j].x
 	})
 	return c
+}
+
+func doesIslandCutWater(s State, shape []Pos) bool {
+	surroundingWater := map[Pos]void{}
+	for _, p := range shape {
+		for _, np := range s.Around(p) {
+			if s.Get(np).MaybeWater() {
+				surroundingWater[np] = void{}
+			}
+		}
+	}
+	for _, p := range shape {
+		delete(surroundingWater, p)
+	}
+	waterBodies := GroupBodies(s, posMapToSlice(surroundingWater))
+
+	for i, w1 := range waterBodies {
+		for _, w2 := range waterBodies[i+1:] {
+			avoid := map[Pos]void{}
+			for _, p := range shape {
+				avoid[p] = void{}
+			}
+			if len(DFS(s, w1.Any(), w2.Any(), avoid)) == 0 {
+				return true
+			}
+		}
+	}
+	return false
 }
