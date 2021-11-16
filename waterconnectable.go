@@ -53,64 +53,6 @@ func WaterConnectable(s State) State {
 	return s
 }
 
-/*
-func findWaterPaths(s State, dst, src Pos) map[Pos]void {
-	// fmt.Printf("findWaterPaths(%v -> %v)\n", src, dst)
-	var unavoidable map[Pos]void
-	cb := func(path []Pos) bool {
-		// fmt.Printf("Path: %v\n", path)
-		if unavoidable == nil {
-			unavoidable = map[Pos]void{}
-			for _, p := range path {
-				unavoidable[p] = void{}
-			}
-		} else {
-			for p := range unavoidable {
-				if !inPath(path, p) {
-					delete(unavoidable, p)
-				}
-			}
-		}
-		// fmt.Printf("Remaining unavoidables: %v\n", unavoidable)
-		return len(unavoidable) > 0
-	}
-	BFS(s, src, dst, cb)
-	return unavoidable
-}
-
-func BFS(s State, src, dst Pos, cb func(path []Pos) bool) {
-	dfsMode := false
-	queue := [][]Pos{[]Pos{src}}
-	for len(queue) > 0 {
-		var path []Pos
-		if dfsMode {
-			path = queue[len(queue)-1]
-			queue = queue[:len(queue)-1]
-		} else {
-			path = queue[0]
-			queue = queue[1:]
-		}
-		p := path[0]
-		for _, np := range s.Around(p) {
-			if s.Get(np).Land() {
-				continue
-			}
-			if np == dst {
-				if !cb(path) {
-					return
-				}
-				dfsMode = !dfsMode
-				break
-			}
-			if inPath(path, np) {
-				continue
-			}
-			queue = append(queue, append([]Pos{np}, path...))
-		}
-	}
-}
-*/
-
 func inPath(path []Pos, p Pos) bool {
 	for _, pp := range path {
 		if p == pp {
